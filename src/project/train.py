@@ -17,7 +17,7 @@ class TrainBuilder:
     def get_default(trick: str, value: str, **kwargs) -> pl.Trainer:
         root_dir: str = 'running'
         return pl.Trainer(
-            max_epochs=10,
+            max_epochs=100,
             accelerator='gpu',
             devices=1,
             callbacks=[

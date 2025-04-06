@@ -6,18 +6,6 @@ from model import LitResNet, LitResNetBuilder
 from train import TrainBuilder
 
 
-def timer(func):
-    def wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = func(*args, **kwargs)
-        end_time = time.time()
-        print(f"⏱️ Function '{func.__name__}' executed in {(end_time - start_time):.2f} seconds.")
-        return result
-
-    return wrapper
-
-
-@timer
 def run_tricks():
     # different model tricks
     model_builder = LitResNetBuilder()
@@ -31,7 +19,6 @@ def run_tricks():
 
         trainer.fit(model, datamodule=data)
         print('✅ Training complete\n')
-        trainer.test(model, datamodule=data)
 
     # different data tricks
     data_builder = DataModuleBuilder()
@@ -42,7 +29,6 @@ def run_tricks():
         print(data.summary())
         print('🚀 Training started...\n')
         trainer.fit(model, datamodule=data)
-        trainer.test(model, datamodule=data)
 
     # different training tricks
     trainer_builder = TrainBuilder()
@@ -52,7 +38,6 @@ def run_tricks():
         print(data.summary())
         print('🚀 Training started...\n')
         trainer.fit(model, datamodule=data)
-        trainer.test(model, datamodule=data)
 
     # different torch tricks
     for matmul_precision in ['highest', 'high', 'medium']:
@@ -69,7 +54,6 @@ def run_tricks():
 
         trainer.fit(model, datamodule=data)
         print('✅ Training complete\n')
-        trainer.test(model, datamodule=data)
 
     torch.set_float32_matmul_precision('high')
     for cudnn_benchmark in [True, False]:
@@ -83,7 +67,6 @@ def run_tricks():
         print(data.summary())
         print('🚀 Training started...\n')
         trainer.fit(model, datamodule=data)
-        trainer.test(model, datamodule=data)
 
 
 if __name__ == '__main__':

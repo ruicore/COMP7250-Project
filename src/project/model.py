@@ -4,6 +4,7 @@ import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 import torchvision.models as models
+from torchmetrics.classification import Accuracy
 
 
 class LitResNet(pl.LightningModule):
@@ -15,15 +16,17 @@ class LitResNet(pl.LightningModule):
         self.model = models.resnet18(pretrained=False, num_classes=10)
         self.criterion = nn.CrossEntropyLoss(label_smoothing=label_smoothing)
 
+        self.train_acc = Accuracy(task='multiclass', num_classes=10)
+        self.val_acc = Accuracy(task='multiclass', num_classes=10)
+
     def forward(self, x):
-        x = x.to(memory_format=torch.contiguous_format) if self.hparams.channels_last else x
         return self.model(x)
 
     def training_step(self, batch, batch_idx):
         x, y = batch
         preds = self(x)
         loss = self.criterion(preds, y)
-        acc = (preds.argmax(dim=1) == y).float().mean()
+        acc = self.train_acc(preds, y)
         self.log('train_loss', loss)
         self.log('train_acc', acc)
         return loss
@@ -32,7 +35,7 @@ class LitResNet(pl.LightningModule):
         x, y = batch
         preds = self(x)
         loss = self.criterion(preds, y)
-        acc = (preds.argmax(dim=1) == y).float().mean()
+        acc = self.val_acc(preds, y)
         self.log('val_loss', loss, prog_bar=True)
         self.log('val_acc', acc, prog_bar=True)
 
