@@ -22,15 +22,11 @@ class TrainBuilder:
             callbacks=[
                 ModelCheckpoint(monitor='val_acc', mode='max', save_top_k=1, filename='{epoch}-{val_acc:.4f}'),
                 LearningRateMonitor(logging_interval='epoch'),
+                EarlyStopping(monitor='val_acc', patience=10, mode='max'),
             ],
             logger=[
                 TensorBoardLogger('logs', name=trick, version=value),
                 CSVLogger('logs_csv', name=trick, version=value),
-                EarlyStopping(
-                    monitor='val_acc',
-                    patience=10,
-                    mode='max',
-                ),
             ],
             profiler=PyTorchProfiler(
                 dirpath=f'profiler/{trick}',

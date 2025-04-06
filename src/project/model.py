@@ -11,6 +11,7 @@ class LitResNet(pl.LightningModule):
         super().__init__()
         self.save_hyperparameters()
 
+        self.lr, self.label_smoothing, self.channels_last = lr, label_smoothing, channels_last
         self.model = models.resnet18(pretrained=False, num_classes=10)
         self.criterion = nn.CrossEntropyLoss(label_smoothing=label_smoothing)
 
@@ -43,9 +44,9 @@ class LitResNet(pl.LightningModule):
     def summary(self):
         return (
             f'Model Config:\n'
-            f'M  - Learning Rate: {self.lr}\n'
-            f'M  - Label Smoothing: {self.label_smoothing}\n'
-            f'M  - Channels Last: {self.channels_last}'
+            f'M - Learning Rate: {self.lr}\n'
+            f'M - Label Smoothing: {self.label_smoothing}\n'
+            f'M - Channels Last: {self.channels_last}'
         )
 
 

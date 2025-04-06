@@ -55,9 +55,9 @@ class CIFAR10DataModule(pl.LightningDataModule):
     def summary(self):
         return (
             f'DataModule Config:\n'
-            f'  - Batch Size: {self.batch_size}\n'
-            f'  - Num Workers: {self.num_workers}\n'
-            f'  - Pin Memory: {self.pin_memory}'
+            f'D - Batch Size: {self.batch_size}\n'
+            f'D - Num Workers: {self.num_workers}\n'
+            f'D - Pin Memory: {self.pin_memory}'
         )
 
 

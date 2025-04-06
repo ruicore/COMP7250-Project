@@ -38,3 +38,4 @@ torchvision==0.21.0
 tqdm==4.67.1
 typing_extensions==4.13.1
 yarl==1.18.3
+tensorboard==2.19.0

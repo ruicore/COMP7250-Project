@@ -25,8 +25,8 @@ def run_tricks():
         data = CIFAR10DataModule()
         trainer = TrainBuilder.get_default(model_builder.trick, model_builder.value)
 
-        print('📦 Model Config:', model.summary())
-        print('📊 Data Config:', data.summary())
+        print(model.summary())
+        print(data.summary())
         print('🚀 Training started...\n')
 
         trainer.fit(model, datamodule=data)
@@ -38,8 +38,8 @@ def run_tricks():
     for data in data_builder:
         model = LitResNet()
         trainer = TrainBuilder.get_default(data_builder.trick, data_builder.value)
-        print('📦 Model Config:', model.summary())
-        print('📊 Data Config:', data.summary())
+        print(model.summary())
+        print(data.summary())
         print('🚀 Training started...\n')
         trainer.fit(model, datamodule=data)
         trainer.test(model, datamodule=data)
@@ -48,8 +48,8 @@ def run_tricks():
     trainer_builder = TrainBuilder()
     for trainer in trainer_builder:
         model, data = LitResNet(), CIFAR10DataModule()
-        print('📦 Model Config:', model.summary())
-        print('📊 Data Config:', data.summary())
+        print(model.summary())
+        print(data.summary())
         print('🚀 Training started...\n')
         trainer.fit(model, datamodule=data)
         trainer.test(model, datamodule=data)
@@ -63,8 +63,8 @@ def run_tricks():
             TrainBuilder.get_default('MatmulPrecision', matmul_precision),
         )
 
-        print('📦 Model Config:', model.summary())
-        print('📊 Data Config:', data.summary())
+        print(model.summary())
+        print(data.summary())
         print('🚀 Training started...\n')
 
         trainer.fit(model, datamodule=data)
@@ -79,8 +79,8 @@ def run_tricks():
             CIFAR10DataModule(),
             TrainBuilder.get_default('CudnnBenchmark', str(cudnn_benchmark)),
         )
-        print('📦 Model Config:', model.summary())
-        print('📊 Data Config:', data.summary())
+        print(model.summary())
+        print(data.summary())
         print('🚀 Training started...\n')
         trainer.fit(model, datamodule=data)
         trainer.test(model, datamodule=data)
