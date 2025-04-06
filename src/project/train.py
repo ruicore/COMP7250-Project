@@ -45,5 +45,6 @@ class TrainBuilder:
             ),
             log_every_n_steps=20,
             deterministic=False,
+            val_check_interval=1,
             **kwargs,
         )

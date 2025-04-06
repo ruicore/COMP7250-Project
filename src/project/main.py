@@ -1,5 +1,3 @@
-import time
-
 import torch
 from data import CIFAR10DataModule, DataModuleBuilder
 from model import LitResNet, LitResNetBuilder
@@ -15,10 +13,7 @@ def run_tricks():
 
         print(model.summary())
         print(data.summary())
-        print('🚀 Training started...\n')
-
         trainer.fit(model, datamodule=data)
-        print('✅ Training complete\n')
 
     # different data tricks
     data_builder = DataModuleBuilder()
@@ -27,16 +22,14 @@ def run_tricks():
         trainer = TrainBuilder.get_default(data_builder.trick, data_builder.value)
         print(model.summary())
         print(data.summary())
-        print('🚀 Training started...\n')
         trainer.fit(model, datamodule=data)
 
     # different training tricks
     trainer_builder = TrainBuilder()
     for trainer in trainer_builder:
-        model, data = LitResNet(), CIFAR10DataModule()
+        model, data = LitResNet(), CIFAR10DataModule(batch_size=256, num_workers=4, pin_memory=True)
         print(model.summary())
         print(data.summary())
-        print('🚀 Training started...\n')
         trainer.fit(model, datamodule=data)
 
     # different torch tricks
@@ -44,28 +37,24 @@ def run_tricks():
         torch.set_float32_matmul_precision(matmul_precision)
         model, data, trainer = (
             LitResNet(),
-            CIFAR10DataModule(),
+            CIFAR10DataModule(batch_size=256, num_workers=4, pin_memory=True),
             TrainBuilder.get_default('MatmulPrecision', matmul_precision),
         )
 
         print(model.summary())
         print(data.summary())
-        print('🚀 Training started...\n')
-
         trainer.fit(model, datamodule=data)
-        print('✅ Training complete\n')
 
     torch.set_float32_matmul_precision('high')
     for cudnn_benchmark in [True, False]:
         torch.backends.cudnn.benchmark = cudnn_benchmark
         model, data, trainer = (
             LitResNet(),
-            CIFAR10DataModule(),
+            CIFAR10DataModule(batch_size=256, num_workers=4, pin_memory=True),
             TrainBuilder.get_default('CudnnBenchmark', str(cudnn_benchmark)),
         )
         print(model.summary())
         print(data.summary())
-        print('🚀 Training started...\n')
         trainer.fit(model, datamodule=data)
 
 
