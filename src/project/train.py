@@ -15,26 +15,33 @@ class TrainBuilder:
 
     @staticmethod
     def get_default(trick: str, value: str, **kwargs) -> pl.Trainer:
+        root_dir: str = 'running'
         return pl.Trainer(
             max_epochs=10,
             accelerator='gpu',
             devices=1,
             callbacks=[
-                ModelCheckpoint(monitor='val_acc', mode='max', save_top_k=1, filename='{epoch}-{val_acc:.4f}'),
+                ModelCheckpoint(
+                    monitor='val_acc',
+                    mode='max',
+                    save_top_k=1,
+                    dirpath=f'{root_dir}/checkpoints/{trick}:{value}',
+                    filename='{epoch}-{val_acc:.4f}',
+                ),
                 LearningRateMonitor(logging_interval='epoch'),
                 EarlyStopping(monitor='val_acc', patience=10, mode='max'),
             ],
             logger=[
-                TensorBoardLogger('logs', name=trick, version=value),
-                CSVLogger('logs_csv', name=trick, version=value),
+                TensorBoardLogger(f'{root_dir}/logs', name=trick, version=value),
+                CSVLogger(f'{root_dir}/logs_csv', name=trick, version=value),
             ],
             profiler=PyTorchProfiler(
-                dirpath=f'profiler/{trick}',
+                dirpath=f'{root_dir}/profiler/{trick}',
                 filename=value,
                 record_shapes=True,
                 export_to_chrome=True,
                 use_cuda=True,
-                on_trace_ready=torch.profiler.tensorboard_trace_handler(f'profiler/{trick}:{value}'),
+                on_trace_ready=torch.profiler.tensorboard_trace_handler(f'{root_dir}/profiler/{trick}:{value}'),
             ),
             log_every_n_steps=20,
             deterministic=False,

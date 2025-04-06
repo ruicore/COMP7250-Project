@@ -16,7 +16,7 @@ class CIFAR10DataModule(pl.LightningDataModule):
 
     def setup(self, stage=None):
         self.trainset = datasets.CIFAR10(
-            root='./data',
+            root='./running/data',
             train=True,
             download=True,
             transform=transforms.Compose(
@@ -28,7 +28,7 @@ class CIFAR10DataModule(pl.LightningDataModule):
             ),
         )
         self.valset = datasets.CIFAR10(
-            root='./data',
+            root='./running/data',
             train=False,
             download=True,
             transform=transforms.ToTensor(),
