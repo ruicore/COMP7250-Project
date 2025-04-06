@@ -79,6 +79,6 @@ repos:
         name: mypy
         entry: mypy
         args:
-          - src/
+          - src/.
         pass_filenames: false
         language: system
