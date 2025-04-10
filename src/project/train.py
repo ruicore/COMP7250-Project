@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytorch_lightning as pl
 import torch
 from pytorch_lightning.callbacks import EarlyStopping, LearningRateMonitor, ModelCheckpoint
@@ -6,8 +8,8 @@ from pytorch_lightning.profilers import PyTorchProfiler
 
 
 class TrainBuilder:
-    trick: str = ''
-    value: str = ''
+    trick_name: str = 'None'
+    trick_value: str = 'None'
 
     def __iter__(self):
         for precision in ['32-true', '16-mixed', 'bf16-mixed']:
@@ -15,8 +17,8 @@ class TrainBuilder:
 
     @staticmethod
     def get_default(trick: str, value: str, **kwargs) -> pl.Trainer:
-        root_dir: str = 'running'
-        return pl.Trainer(
+        root_dir: str = f"running/{datetime.now().strftime('%m%d')}"
+        trainer = pl.Trainer(
             max_epochs=100,
             accelerator='gpu',
             devices=1,
@@ -40,11 +42,14 @@ class TrainBuilder:
                 filename=value,
                 record_shapes=True,
                 export_to_chrome=True,
-                use_cuda=True,
+                activities=[torch.profiler.ProfilerActivity.CPU, torch.profiler.ProfilerActivity.CUDA],
                 on_trace_ready=torch.profiler.tensorboard_trace_handler(f'{root_dir}/profiler/{trick}:{value}'),
             ),
             log_every_n_steps=20,
             deterministic=False,
-            val_check_interval=1,
+            enable_progress_bar=False,
             **kwargs,
         )
+        setattr(trainer, 'trick_name', trick)
+        setattr(trainer, 'trick_value', value)
+        return trainer
