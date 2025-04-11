@@ -75,10 +75,10 @@ class CIFAR10DataModule(pl.LightningDataModule):
 
 class DataModuleBuilder:
     def __iter__(self):
-        for batch_size in [32, 64, 128, 256, 512]:
+        for batch_size in [32, 64, 128, 256]:
             yield CIFAR10DataModule(batch_size=batch_size, trick_name='Batch Size', trick_value=str(batch_size))
 
-        for num_worker in [2, 4, 8]:
+        for num_worker in [2, 4, 8, 12]:
             yield CIFAR10DataModule(num_workers=num_worker, trick_name='Num Workers', trick_value=str(num_worker))
 
         for pin in [False, True]:

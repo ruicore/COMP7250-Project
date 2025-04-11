@@ -58,8 +58,7 @@ class LitResNet(pl.LightningModule):
         self.log('val_loss', loss, prog_bar=True)
         self.log('val_acc', acc, prog_bar=True)
 
-    def on_fit_start(self):
-        self.logger.log_hyperparams(self.hparams)
+
 
     def configure_optimizers(self):
         optimizer = torch.optim.SGD(self.parameters(), lr=self.hparams.lr, momentum=0.9, weight_decay=5e-4)

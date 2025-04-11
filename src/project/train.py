@@ -17,7 +17,7 @@ class TrainBuilder:
 
     @staticmethod
     def get_default(trick: str, value: str, **kwargs) -> pl.Trainer:
-        root_dir: str = f"running/{datetime.now().strftime('%m%d')}"
+        root_dir: str = f"running/0412"
         trainer = pl.Trainer(
             max_epochs=100,
             accelerator='gpu',

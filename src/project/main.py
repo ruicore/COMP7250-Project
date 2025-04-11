@@ -5,13 +5,6 @@ from train import TrainBuilder
 
 
 def run_tricks():
-    # model tricks
-    for model in LitResNetBuilder():
-        data = CIFAR10DataModule(trick_name=model.trick_name, trick_value=model.trick_value)
-        trainer = TrainBuilder.get_default(model.trick_name, model.trick_value)
-        print(model.summary(), '\n', data.summary())
-        trainer.fit(model, datamodule=data)
-
     # data tricks
     for data in DataModuleBuilder():
         model = LitResNet(
@@ -22,7 +15,14 @@ def run_tricks():
             trick_value=data.trick_value,
         )
         trainer = TrainBuilder.get_default(data.trick_name, data.trick_value)
-        print(model.summary(), '\n', data.summary())
+        print(model.summary(), data.summary(), sep='\n')
+        trainer.fit(model, datamodule=data)
+
+    # model tricks
+    for model in LitResNetBuilder():
+        data = CIFAR10DataModule(trick_name=model.trick_name, trick_value=model.trick_value)
+        trainer = TrainBuilder.get_default(model.trick_name, model.trick_value)
+        print(model.summary(), data.summary(), sep='\n')
         trainer.fit(model, datamodule=data)
 
     # training tricks
