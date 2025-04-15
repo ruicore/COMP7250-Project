@@ -17,7 +17,7 @@ class TrainBuilder:
 
     @staticmethod
     def get_default(trick: str, value: str, **kwargs) -> pl.Trainer:
-        root_dir: str = f"running/0412"
+        root_dir: str = f"running"
         trainer = pl.Trainer(
             max_epochs=100,
             accelerator='gpu',
